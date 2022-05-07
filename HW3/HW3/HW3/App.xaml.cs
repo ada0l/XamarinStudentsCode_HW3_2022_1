@@ -10,7 +10,7 @@ namespace HW3
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new GameCyclePage();
         }
 
         protected override void OnStart()
