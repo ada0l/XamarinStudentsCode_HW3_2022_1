@@ -4,18 +4,31 @@
              x:Class="HW3.GameCyclePage">
     <ContentPage.Content>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-            </Grid.GestureRecognizers>
-            <StackLayout Grid.Row="0" VerticalOptions="Center">
-                <Label x:Name="currentStepText" Text="test" HorizontalOptions="Center" FontSize="Medium" VerticalOptions="Center">
+            <Image x:Name="background" Aspect="AspectFill"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </Grid.GestureRecognizers>
+                <StackLayout Grid.Row="0" Padding="8, 38, 8, 38" VerticalOptions="FillAndExpand">
+                    <Frame BackgroundColor="#cf1f1f1f" CornerRadius="5" BorderColor="WhiteSmoke" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Label x:Name="currentStepText" Text="test" TextColor="white" HorizontalOptions="Center" FontSize="Medium" VerticalOptions="Center">
                 
-                </Label>
-            </StackLayout>
+                        </Label>
+                    </Frame>
+                </StackLayout>
+                <StackLayout x:Name="optionSelector" Grid.Row="1" VerticalOptions="Center" Padding="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <!--Плохая подвязка dialogTriger к button-->
+                            <Button ClassId="{Binding dialogTrigger}" Text="{Binding text}" Clicked="Button_Clicked"></Button>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
