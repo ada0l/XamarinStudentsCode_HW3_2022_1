@@ -10,9 +10,8 @@ namespace VisualNowel
 
     public struct OptionSelector
     {
-        public string text;
-        public string dialogTrigger;
-
+        public string text { get; set; }
+        public string dialogTrigger { get; set; }
     }
 
     public struct Options
@@ -25,6 +24,7 @@ namespace VisualNowel
     {
         public List<Step> steps;
         public Options options;
+        public string background;
     }
 
     public class DialogController
@@ -52,10 +52,11 @@ namespace VisualNowel
                             new OptionSelector
                             {
                                 text = "Some Option Text",
-                                dialogTrigger = "dialog2"
+                                dialogTrigger = "dialog3"
                             }
                         }
-                    }
+                    },
+                    background = "road"
                 }
             },
             {
@@ -82,7 +83,8 @@ namespace VisualNowel
                                 dialogTrigger = "dialog3"
                             }
                         }
-                    }
+                    },
+                    background = "gate"
                 }
             },
             {
@@ -92,7 +94,8 @@ namespace VisualNowel
                     {
                         new Step { text = "Good Text" },
                         new Step { text = "Bad Text" }
-                    }
+                    },
+                    background = "square"
                 }
             }
         };
@@ -118,6 +121,25 @@ namespace VisualNowel
                 return _currentDialog?.steps[_currentStepIndex];
             }
             return null;
+        }
+
+        public Options? GetOptions()
+        {
+            return _currentDialog?.options;
+        }
+
+        public void SetNextDialog(string dialogName)
+        {
+            if (_dialogs.TryGetValue(dialogName, out var nextDialog))
+            {
+                _currentDialog = nextDialog;
+                _currentStepIndex = 0;
+            }
+        }
+
+        public string GetBackground()
+        {
+            return _currentDialog?.background;
         }
     }
 }
