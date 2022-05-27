@@ -12,9 +12,13 @@ namespace HW3
         public GameCyclePage()
         {
             InitializeComponent();
+            
             _controller = new DialogController();
             currentStepText.Text = _controller.CurrentStep()?.text;
             background.Source = _controller.GetBackground();
+
+            var startNPC = _controller.CurrentStep()?.npc;
+            DrawNPC(startNPC);
         }
 
         private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -24,15 +28,19 @@ namespace HW3
             
             if (currentStep != null)
             {
+                var currentNPC = currentStep.Value.npc;
                 currentStepText.Text = currentStep.Value.text;
+                DrawNPC(currentNPC);
             }
             else
             {
                 var options = _controller.GetOptions();
-                if(options != null)
+                var currentNPC = options.Value.npc;
+                if (options != null)
                 {
                     BindableLayout.SetItemsSource(optionSelector, options.Value.selectors);
                     currentStepText.Text = options.Value.text;
+                    DrawNPC(currentNPC);
                 }
             }
         }
@@ -43,8 +51,21 @@ namespace HW3
             _controller.SetNextDialog(dialogTrigger);
 
             currentStepText.Text = _controller.CurrentStep()?.text;
+            currentNpcName.Text = _controller.CurrentStep()?.npc.name;
             BindableLayout.SetItemsSource(optionSelector, null);
             background.Source = _controller.GetBackground();
+            
+        }
+
+        private void DrawNPC(NPC? npc)
+        {
+            currentNpcName.Text = npc.Value.name;
+            npcImage.Source = npc.Value.image;
+
+            RelativeLayout.SetXConstraint(npcImage, Constraint.Constant(npc.Value.transform.x));
+            RelativeLayout.SetYConstraint(npcImage, Constraint.Constant(npc.Value.transform.y));
+            RelativeLayout.SetWidthConstraint(npcImage, Constraint.Constant(npc.Value.transform.width));
+            RelativeLayout.SetHeightConstraint(npcImage, Constraint.Constant(npc.Value.transform.height));
         }
     }
 }

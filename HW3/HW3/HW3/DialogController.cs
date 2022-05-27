@@ -6,7 +6,24 @@ namespace VisualNowel
     public struct Step
     {
         public string text;
+        public NPC npc;
     }
+
+    public struct Transform
+    {
+        public float x { get; set; } 
+        public float y { get; set; } 
+        public float width { get; set; }
+        public float height { get; set; }
+    }
+
+    public struct NPC
+    {
+        public string name;
+        public string image;
+        public Transform transform;
+    }
+
 
     public struct OptionSelector
     {
@@ -18,13 +35,14 @@ namespace VisualNowel
     {
         public string text;
         public List<OptionSelector> selectors;
+        public NPC npc;
     }
 
     public struct Dialog
     {
+        public string background;
         public List<Step> steps;
         public Options options;
-        public string background;
     }
 
     public class DialogController
@@ -36,8 +54,38 @@ namespace VisualNowel
                 new Dialog {
                     steps = new List<Step>
                     {
-                        new Step { text = "Some Text" },
-                        new Step { text = "Next Text" }
+                        new Step
+                        {
+                            text = "Some Text",
+                            npc = new NPC
+                            {
+                                name = "Сэм",
+                                image = "samuel",
+                                transform = new Transform
+                                {
+                                    x = 90,
+                                    y = 400,
+                                    width = 256,
+                                    height = 256
+                                }
+                            }
+                        },
+                        new Step 
+                        {
+                            text = "Next Text",
+                            npc = new NPC
+                            {
+                                name = "Босс",
+                                image = "snake",
+                                transform = new Transform
+                                {
+                                    x = 15,
+                                    y = 400,
+                                    width = 256,
+                                    height = 256
+                                }
+                            }
+                        }
                     },
                     options = new Options
                     {
@@ -54,7 +102,20 @@ namespace VisualNowel
                                 text = "Some Option Text",
                                 dialogTrigger = "dialog3"
                             }
-                        }
+                        },
+                        npc = new NPC
+                            {
+                                name = "Сэм",
+                                image = "samuel",
+                                transform = new Transform
+                                {
+                                    x = 45,
+                                    y = 400,
+                                    width = 256,
+                                    height = 256
+                                }
+                            }
+
                     },
                     background = "road"
                 }
