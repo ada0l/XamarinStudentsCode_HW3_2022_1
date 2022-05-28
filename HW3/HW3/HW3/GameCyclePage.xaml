@@ -37,7 +37,7 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <!--Плохая подвязка dialogTriger к button-->
-                            <Button ClassId="{Binding dialogTrigger}" Text="{Binding text}" Clicked="Button_Clicked"/>
+                            <Button ClassId="{Binding dialog_trigger}" Text="{Binding text}" Clicked="Button_Clicked"/>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
