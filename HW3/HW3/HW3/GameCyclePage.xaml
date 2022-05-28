@@ -5,6 +5,9 @@
     <ContentPage.Content>
         <Grid>
             <Image x:Name="background" Aspect="AspectFill"/>
+            <RelativeLayout>
+                <Image x:Name="npcImage"/>
+            </RelativeLayout>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -14,17 +17,27 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                 </Grid.GestureRecognizers>
                 <StackLayout Grid.Row="0" Padding="8, 38, 8, 38" VerticalOptions="FillAndExpand">
+                    <Frame BackgroundColor="#cf1f1f1f" CornerRadius="5" BorderColor="WhiteSmoke" HorizontalOptions="FillAndExpand">
+                        <Label x:Name="currentNpcName" 
+                               Text="test" TextColor="white" 
+                               HorizontalOptions="Center" 
+                               FontSize="Medium" 
+                               VerticalOptions="Center"/>
+                    </Frame>
                     <Frame BackgroundColor="#cf1f1f1f" CornerRadius="5" BorderColor="WhiteSmoke" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                        <Label x:Name="currentStepText" Text="test" TextColor="white" HorizontalOptions="Center" FontSize="Medium" VerticalOptions="Center">
-                
-                        </Label>
+                        <Label x:Name="currentStepText" 
+                               Text="test" TextColor="white" 
+                               HorizontalOptions="Center" 
+                               FontSize="Medium" 
+                               VerticalOptions="Center"/>
+
                     </Frame>
                 </StackLayout>
-                <StackLayout x:Name="optionSelector" Grid.Row="1" VerticalOptions="Center" Padding="8">
+                <StackLayout Grid.Row="1" x:Name="optionSelector" VerticalOptions="Center" Padding="8">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <!--Плохая подвязка dialogTriger к button-->
-                            <Button ClassId="{Binding dialogTrigger}" Text="{Binding text}" Clicked="Button_Clicked"></Button>
+                            <Button ClassId="{Binding dialog_trigger}" Text="{Binding text}" Clicked="Button_Clicked"/>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

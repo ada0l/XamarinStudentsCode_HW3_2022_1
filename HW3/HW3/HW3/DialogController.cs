@@ -6,29 +6,81 @@ namespace VisualNowel
     public struct Step
     {
         public string text;
+        public string npc;
     }
+
+    public struct Transform
+    {
+        public double x { get; set; } 
+        public double y { get; set; } 
+        public double width { get; set; }
+        public double height { get; set; }
+    }
+
+    public struct NPC
+    {
+        public string name;
+        public string image;
+        public Transform transform;
+    }
+
 
     public struct OptionSelector
     {
         public string text { get; set; }
-        public string dialogTrigger { get; set; }
+        public string dialog_trigger { get; set; }
     }
 
     public struct Options
     {
         public string text;
         public List<OptionSelector> selectors;
+        public string npc;
     }
 
     public struct Dialog
     {
+        public string background;
         public List<Step> steps;
         public Options options;
-        public string background;
     }
 
     public class DialogController
     {
+        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>()
+        {
+            {
+                "samuel_left",
+                new NPC
+                {
+                    name = "Сэм",
+                    image = "samuel",
+                    transform = new Transform
+                    {
+                        x = 90,
+                        y = 400,
+                        width = 256,
+                        height = 256
+                    }
+                }
+            },
+            {
+                "snake_left",
+                new NPC
+                {
+                    name = "Босс",
+                    image = "snake",
+                    transform = new Transform
+                    {
+                        x = 90,
+                        y = 400,
+                        width = 256,
+                        height = 256
+                    }
+                }
+            },
+        };
+
         private SortedDictionary<string, Dialog> _dialogs = new SortedDictionary<string, Dialog>()
         {
             {
@@ -36,8 +88,16 @@ namespace VisualNowel
                 new Dialog {
                     steps = new List<Step>
                     {
-                        new Step { text = "Some Text" },
-                        new Step { text = "Next Text" }
+                        new Step
+                        {
+                            text = "Some Text",
+                            npc = "samuel_left"
+                        },
+                        new Step 
+                        {
+                            text = "Next Text",
+                            npc = "snake_left"
+                        }
                     },
                     options = new Options
                     {
@@ -47,14 +107,16 @@ namespace VisualNowel
                             new OptionSelector
                             {
                                 text = "Some Option Text",
-                                dialogTrigger = "dialog2"
+                                dialog_trigger = "dialog2"
                             },
                             new OptionSelector
                             {
                                 text = "Some Option Text",
-                                dialogTrigger = "dialog3"
+                                dialog_trigger = "dialog3"
                             }
-                        }
+                        },
+                        npc = "samuel_left"
+
                     },
                     background = "road"
                 }
@@ -75,12 +137,12 @@ namespace VisualNowel
                             new OptionSelector
                             {
                                 text = "Good Option Text",
-                                dialogTrigger = "dialog3"
+                                dialog_trigger = "dialog3"
                             },
                             new OptionSelector
                             {
                                 text = "Good Option Text",
-                                dialogTrigger = "dialog3"
+                                dialog_trigger = "dialog3"
                             }
                         }
                     },
@@ -140,6 +202,15 @@ namespace VisualNowel
         public string GetBackground()
         {
             return _currentDialog?.background;
+        }
+
+        public NPC? GetNPC(string characterKey)
+        {
+            if (_characters.TryGetValue(characterKey ?? "", out var character))
+            {
+                return character;
+            }
+            return null;
         }
     }
 }
