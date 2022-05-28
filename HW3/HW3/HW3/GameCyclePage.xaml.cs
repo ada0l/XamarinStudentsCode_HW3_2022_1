@@ -51,21 +51,37 @@ namespace HW3
             _controller.SetNextDialog(dialogTrigger);
 
             currentStepText.Text = _controller.CurrentStep()?.text;
-            currentNpcName.Text = _controller.CurrentStep()?.npc.name;
             BindableLayout.SetItemsSource(optionSelector, null);
             background.Source = _controller.GetBackground();
-            
+
+            var npc = _controller.CurrentStep()?.npc;
+            DrawNPC(npc);
         }
 
-        private void DrawNPC(NPC? npc)
+        private void DrawNPC(string npcID)
         {
+            var npc = _controller.GetNPC(npcID);
+            if(npc == null)
+            {
+                CleanNPCView();
+                return;
+            }
+
             currentNpcName.Text = npc.Value.name;
             npcImage.Source = npc.Value.image;
 
-            RelativeLayout.SetXConstraint(npcImage, Constraint.Constant(npc.Value.transform.x));
-            RelativeLayout.SetYConstraint(npcImage, Constraint.Constant(npc.Value.transform.y));
-            RelativeLayout.SetWidthConstraint(npcImage, Constraint.Constant(npc.Value.transform.width));
-            RelativeLayout.SetHeightConstraint(npcImage, Constraint.Constant(npc.Value.transform.height));
+            var transform = npc.Value.transform;
+
+            RelativeLayout.SetXConstraint(npcImage, Constraint.Constant(transform.x));
+            RelativeLayout.SetYConstraint(npcImage, Constraint.Constant(transform.y));
+            RelativeLayout.SetWidthConstraint(npcImage, Constraint.Constant(transform.width));
+            RelativeLayout.SetHeightConstraint(npcImage, Constraint.Constant(transform.height));
+        }
+
+        private void CleanNPCView()
+        {
+            npcImage.Source = "";
+            currentNpcName.Text = "";
         }
     }
 }
