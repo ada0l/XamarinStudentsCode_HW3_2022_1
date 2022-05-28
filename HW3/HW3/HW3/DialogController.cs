@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace VisualNowel
 {
@@ -17,7 +18,7 @@ namespace VisualNowel
         public double height { get; set; }
     }
 
-    public struct NPC
+    public class NPC
     {
         public string name;
         public string image;
@@ -57,7 +58,7 @@ namespace VisualNowel
                     image = "samuel",
                     transform = new Transform
                     {
-                        x = 90,
+                        x = 20,
                         y = 400,
                         width = 256,
                         height = 256
@@ -72,7 +73,7 @@ namespace VisualNowel
                     image = "snake",
                     transform = new Transform
                     {
-                        x = 90,
+                        x = 250,
                         y = 400,
                         width = 256,
                         height = 256
@@ -137,12 +138,12 @@ namespace VisualNowel
                             new OptionSelector
                             {
                                 text = "Good Option Text",
-                                dialog_trigger = "dialog3"
+                                dialog_trigger = "dialog1"
                             },
                             new OptionSelector
                             {
                                 text = "Good Option Text",
-                                dialog_trigger = "dialog3"
+                                dialog_trigger = "dialog1"
                             }
                         }
                     },
@@ -204,13 +205,18 @@ namespace VisualNowel
             return _currentDialog?.background;
         }
 
-        public NPC? GetNPC(string characterKey)
+        public NPC GetNPC(string characterKey)
         {
             if (_characters.TryGetValue(characterKey ?? "", out var character))
             {
                 return character;
             }
             return null;
+        }
+
+        public SortedSet<string> GetNpcKeysForCurrentDialog()
+        {
+            return new SortedSet<string>(_currentDialog?.steps.Select(x => x.npc));
         }
     }
 }

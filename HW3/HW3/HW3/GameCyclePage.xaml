@@ -5,8 +5,17 @@
     <ContentPage.Content>
         <Grid>
             <Image x:Name="background" Aspect="AspectFill"/>
-            <RelativeLayout>
-                <Image x:Name="npcImage"/>
+            <RelativeLayout x:Name="charactersHolder">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Image Opacity="{Binding opacity}"
+                               Source="{Binding image}"
+                               RelativeLayout.XConstraint="{Binding x}"
+                               RelativeLayout.YConstraint="{Binding y}"
+                               RelativeLayout.WidthConstraint="{Binding width}"
+                               RelativeLayout.HeightConstraint="{Binding height}"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
             </RelativeLayout>
             <Grid>
                 <Grid.RowDefinitions>
