@@ -1,13 +1,27 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using VisualNowel;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace HW3
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GameCyclePage : ContentPage
     {
+        private class CharacterViewData
+        {
+            public NPC npc;
+            public string image { get; set; }
+            public Constraint x { get; set; }
+            public Constraint y { get; set; }
+            public Constraint width { get; set; }
+            public Constraint height { get; set; }
+            public double opacity { get; set; } 
+        }
+
         private DialogController _controller;
+        private ObservableCollection<CharacterViewData> _viewDatas;
         
         public GameCyclePage()
         {
@@ -17,8 +31,9 @@ namespace HW3
             currentStepText.Text = _controller.CurrentStep()?.text;
             background.Source = _controller.GetBackground();
 
-            var startNPC = _controller.CurrentStep()?.npc;
-            DrawNPC(startNPC);
+            DrawNPC();
+            SetActiveNPC(_controller.CurrentStep()?.npc);
+            BindableLayout.SetItemsSource(charactersHolder, _viewDatas);
         }
 
         private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -30,17 +45,17 @@ namespace HW3
             {
                 var currentNPC = currentStep.Value.npc;
                 currentStepText.Text = currentStep.Value.text;
-                DrawNPC(currentNPC);
+                SetActiveNPC(currentNPC);
             }
             else
             {
                 var options = _controller.GetOptions();
-                var currentNPC = options.Value.npc;
                 if (options != null)
                 {
+                    var currentNPC = options.Value.npc;
                     BindableLayout.SetItemsSource(optionSelector, options.Value.selectors);
                     currentStepText.Text = options.Value.text;
-                    DrawNPC(currentNPC);
+                    SetActiveNPC(currentNPC);
                 }
             }
         }
@@ -54,34 +69,50 @@ namespace HW3
             BindableLayout.SetItemsSource(optionSelector, null);
             background.Source = _controller.GetBackground();
 
-            var npc = _controller.CurrentStep()?.npc;
-            DrawNPC(npc);
+            DrawNPC();
+            SetActiveNPC(_controller.CurrentStep()?.npc);
         }
 
-        private void DrawNPC(string npcID)
+        private void DrawNPC()
         {
-            var npc = _controller.GetNPC(npcID);
-            if(npc == null)
+            _viewDatas = new ObservableCollection<CharacterViewData>(_controller.GetNpcKeysForCurrentDialog().Select(x => _controller.GetNPC(x)).Where(x => x != null).Select(x => new CharacterViewData
             {
-                CleanNPCView();
-                return;
-            }
+                npc = x,
+                image = x.image,
+                x = Constraint.Constant(x.transform.x),
+                y = Constraint.Constant(x.transform.y),
+                width = Constraint.Constant(x.transform.width),
+                height = Constraint.Constant(x.transform.height),
+                opacity = 0.6
+            }).ToList()); ;
 
-            currentNpcName.Text = npc.Value.name;
-            npcImage.Source = npc.Value.image;
-
-            var transform = npc.Value.transform;
-
-            RelativeLayout.SetXConstraint(npcImage, Constraint.Constant(transform.x));
-            RelativeLayout.SetYConstraint(npcImage, Constraint.Constant(transform.y));
-            RelativeLayout.SetWidthConstraint(npcImage, Constraint.Constant(transform.width));
-            RelativeLayout.SetHeightConstraint(npcImage, Constraint.Constant(transform.height));
+            // W/A
+            BindableLayout.SetItemsSource(charactersHolder, _viewDatas);
         }
 
-        private void CleanNPCView()
+        private void SetActiveNPC(string npcKey)
         {
-            npcImage.Source = "";
             currentNpcName.Text = "";
+            var activeNPC = _controller.GetNPC(npcKey);
+            if (activeNPC != null)
+            {
+                var activeNPCView = _viewDatas.First(x => x.npc == activeNPC);
+                _viewDatas.Remove(activeNPCView);
+
+                for (int i = 0; i < _viewDatas.Count; i++)
+                {
+                    _viewDatas[i].opacity = 0.6;
+                }
+
+                activeNPCView.opacity = 1;
+                _viewDatas.Add(activeNPCView);
+
+                currentNpcName.Text = activeNPC.name;
+
+                // W/A
+                _viewDatas = new ObservableCollection<CharacterViewData>(_viewDatas);
+                BindableLayout.SetItemsSource(charactersHolder, _viewDatas);
+            }
         }
     }
 }
