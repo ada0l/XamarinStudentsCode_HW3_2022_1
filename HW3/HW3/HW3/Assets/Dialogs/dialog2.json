@@ -1,14 +1,12 @@
 ﻿{
-  "background": "road",
+  "background": "gate",
   "steps": [
     {
-      "npc": "samuel_left",
-      "text": "some text",
+      "text": "Good text",
       "message": "throwAction1"
     },
     {
-      "npc": "snake_left",
-      "text": "some text"
+      "text": "Bad text"
     }
   ],
   "options": {
@@ -18,15 +16,14 @@
     "selectors": [
       {
         "text": "some text 2",
-        "dialog_trigger": "dialog2",
+        "dialog_trigger": "dialog1",
         "message": "throwAction2"
       },
       {
         "text": "some text 3",
-        "dialog_trigger": "dialog3",
+        "dialog_trigger": "dialog1",
         "message": "throwAction3"
       }
     ]
   }
- 
 }
