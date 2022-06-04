@@ -1,0 +1,26 @@
+﻿{
+  "samuel_left": {
+    "image": "samuel",
+    "name": "Сэм",
+    "main_theme": "sound",
+    "transform": {
+      "x": 20,
+      "y": 400,
+      "width": 256,
+      "height": 256
+    },
+    "show_animation": {
+ 
+    }
+  },
+  "snake_left": {
+    "image": "snake",
+    "name": "Босс",
+    "transform": {
+      "x": 250,
+      "y": 400,
+      "width": 256,
+      "height": 256
+    }
+  }
+}

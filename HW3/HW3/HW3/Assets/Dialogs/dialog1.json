@@ -1,0 +1,32 @@
+﻿{
+  "background": "road",
+  "steps": [
+    {
+      "npc": "samuel_left",
+      "text": "some text",
+      "message": "throwAction1"
+    },
+    {
+      "npc": "snake_left",
+      "text": "some text"
+    }
+  ],
+  "options": {
+    "npc": "samuel_left",
+    "text": "some text",
+    "message": "throwAction2",
+    "selectors": [
+      {
+        "text": "some text 2",
+        "dialog_trigger": "dialog2",
+        "message": "throwAction2"
+      },
+      {
+        "text": "some text 3",
+        "dialog_trigger": "dialog3",
+        "message": "throwAction3"
+      }
+    ]
+  }
+ 
+}

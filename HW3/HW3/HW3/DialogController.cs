@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace VisualNowel
 {
@@ -48,120 +51,10 @@ namespace VisualNowel
 
     public class DialogController
     {
-        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>()
-        {
-            {
-                "samuel_left",
-                new NPC
-                {
-                    name = "Сэм",
-                    image = "samuel",
-                    transform = new Transform
-                    {
-                        x = 20,
-                        y = 400,
-                        width = 256,
-                        height = 256
-                    }
-                }
-            },
-            {
-                "snake_left",
-                new NPC
-                {
-                    name = "Босс",
-                    image = "snake",
-                    transform = new Transform
-                    {
-                        x = 250,
-                        y = 400,
-                        width = 256,
-                        height = 256
-                    }
-                }
-            },
-        };
 
-        private SortedDictionary<string, Dialog> _dialogs = new SortedDictionary<string, Dialog>()
-        {
-            {
-                "dialog1",
-                new Dialog {
-                    steps = new List<Step>
-                    {
-                        new Step
-                        {
-                            text = "Some Text",
-                            npc = "samuel_left"
-                        },
-                        new Step 
-                        {
-                            text = "Next Text",
-                            npc = "snake_left"
-                        }
-                    },
-                    options = new Options
-                    {
-                        text = "Some Options",
-                        selectors = new List<OptionSelector>
-                        {
-                            new OptionSelector
-                            {
-                                text = "Some Option Text",
-                                dialog_trigger = "dialog2"
-                            },
-                            new OptionSelector
-                            {
-                                text = "Some Option Text",
-                                dialog_trigger = "dialog3"
-                            }
-                        },
-                        npc = "samuel_left"
+        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>();
 
-                    },
-                    background = "road"
-                }
-            },
-            {
-                "dialog2",
-                new Dialog {
-                    steps = new List<Step>
-                    {
-                        new Step { text = "Good Text" },
-                        new Step { text = "Bad Text" }
-                    },
-                    options = new Options
-                    {
-                        text = "Good Options",
-                        selectors = new List<OptionSelector>
-                        {
-                            new OptionSelector
-                            {
-                                text = "Good Option Text",
-                                dialog_trigger = "dialog1"
-                            },
-                            new OptionSelector
-                            {
-                                text = "Good Option Text",
-                                dialog_trigger = "dialog1"
-                            }
-                        }
-                    },
-                    background = "gate"
-                }
-            },
-            {
-                "dialog3",
-                new Dialog {
-                    steps = new List<Step>
-                    {
-                        new Step { text = "Good Text" },
-                        new Step { text = "Bad Text" }
-                    },
-                    background = "square"
-                }
-            }
-        };
+        private SortedDictionary<string, Dialog> _dialogs = new SortedDictionary<string, Dialog>();
         private Dialog? _currentDialog = null;
         private int _currentStepIndex = 0;
 
@@ -169,7 +62,8 @@ namespace VisualNowel
 
         public DialogController()
         {
-            _currentDialog = _dialogs["dialog1"];
+            LoadCharacters();
+            SetNextDialog("dialog1");
         }
 
         public void NextStep()
@@ -193,6 +87,10 @@ namespace VisualNowel
 
         public void SetNextDialog(string dialogName)
         {
+            if (!_dialogs.ContainsKey(dialogName))
+            {
+                _dialogs.Add(dialogName, LoadDialog(dialogName));
+            }
             if (_dialogs.TryGetValue(dialogName, out var nextDialog))
             {
                 _currentDialog = nextDialog;
@@ -216,7 +114,28 @@ namespace VisualNowel
 
         public SortedSet<string> GetNpcKeysForCurrentDialog()
         {
-            return new SortedSet<string>(_currentDialog?.steps.Select(x => x.npc));
+            return  new SortedSet<string>(_currentDialog?.steps.Select(x => x.npc).Concat(
+                new [] { _currentDialog?.options.npc } ));
+        }
+
+        private string LoadFile(string filename)
+        {
+            var stream = Application.Current.GetType().Assembly.GetManifestResourceStream(filename);
+            var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            return json;
+        }
+
+        private void LoadCharacters()
+        {
+            _characters = JsonConvert.DeserializeObject<SortedDictionary<string, NPC>>(
+                LoadFile("HW3.Assets.npc.json"));
+        }
+
+        public Dialog LoadDialog(string dialog_name)
+        {
+            return JsonConvert.DeserializeObject<Dialog>(
+                LoadFile($"HW3.Assets.Dialogs.{dialog_name}.json"));
         }
     }
 }

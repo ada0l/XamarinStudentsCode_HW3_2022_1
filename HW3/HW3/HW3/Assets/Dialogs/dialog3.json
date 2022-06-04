@@ -1,0 +1,14 @@
+﻿{
+  "background": "sqaure",
+  "steps": [
+    {
+      "text": "Good text",
+      "message": "throwAction1"
+    },
+    {
+      "text": "Bad text"
+    }
+  ],
+  "options": {
+  }
+}

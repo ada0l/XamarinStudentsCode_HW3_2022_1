@@ -1,0 +1,29 @@
+﻿{
+  "background": "gate",
+  "steps": [
+    {
+      "text": "Good text",
+      "message": "throwAction1"
+    },
+    {
+      "text": "Bad text"
+    }
+  ],
+  "options": {
+    "npc": "samuel_left",
+    "text": "some text",
+    "message": "throwAction2",
+    "selectors": [
+      {
+        "text": "some text 2",
+        "dialog_trigger": "dialog1",
+        "message": "throwAction2"
+      },
+      {
+        "text": "some text 3",
+        "dialog_trigger": "dialog1",
+        "message": "throwAction3"
+      }
+    ]
+  }
+}
