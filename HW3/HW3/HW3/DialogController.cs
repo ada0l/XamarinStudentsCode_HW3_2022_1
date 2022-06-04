@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace VisualNowel
 {
@@ -48,39 +51,8 @@ namespace VisualNowel
 
     public class DialogController
     {
-        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>()
-        {
-            {
-                "samuel_left",
-                new NPC
-                {
-                    name = "Сэм",
-                    image = "samuel",
-                    transform = new Transform
-                    {
-                        x = 20,
-                        y = 400,
-                        width = 256,
-                        height = 256
-                    }
-                }
-            },
-            {
-                "snake_left",
-                new NPC
-                {
-                    name = "Босс",
-                    image = "snake",
-                    transform = new Transform
-                    {
-                        x = 250,
-                        y = 400,
-                        width = 256,
-                        height = 256
-                    }
-                }
-            },
-        };
+
+        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>();
 
         private SortedDictionary<string, Dialog> _dialogs = new SortedDictionary<string, Dialog>()
         {
@@ -169,6 +141,7 @@ namespace VisualNowel
 
         public DialogController()
         {
+            LoadResources();
             _currentDialog = _dialogs["dialog1"];
         }
 
@@ -217,6 +190,21 @@ namespace VisualNowel
         public SortedSet<string> GetNpcKeysForCurrentDialog()
         {
             return new SortedSet<string>(_currentDialog?.steps.Select(x => x.npc));
+        }
+
+        private string LoadFile(string filename)
+        {
+            var stream = Application.Current.GetType().Assembly.GetManifestResourceStream(filename);
+            var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            return json;
+        }
+
+        private void LoadResources()
+        {
+            _characters = JsonConvert.DeserializeObject<SortedDictionary<string, NPC>>(
+                LoadFile("HW3.Assets.npc.json")
+            );
         }
     }
 }
