@@ -15,6 +15,7 @@
     <None Remove="Assets\Dialogs\dialog2.json" />
     <None Remove="Assets\Dialogs\dialog3.json" />
     <None Remove="Assets\npc.json" />
+    <None Remove="Assets\startProfile.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Assets\npc.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\startProfile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

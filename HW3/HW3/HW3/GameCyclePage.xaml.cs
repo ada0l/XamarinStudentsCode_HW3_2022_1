@@ -21,13 +21,18 @@ namespace HW3
         }
 
         private DialogController _controller;
+        private ResourceLoader _resourceLoader;
+        private SaveSystem _saveSystem;
         private ObservableCollection<CharacterViewData> _viewDatas;
         
         public GameCyclePage()
         {
             InitializeComponent();
+
+            _resourceLoader = new ResourceLoader();
+            _saveSystem = new SaveSystem(_resourceLoader.GetStartProfile());
+            _controller = new DialogController(_resourceLoader.GetGameData(), _saveSystem.GetActive());
             
-            _controller = new DialogController();
             currentStepText.Text = _controller.CurrentStep()?.text;
             background.Source = _controller.GetBackground();
 
