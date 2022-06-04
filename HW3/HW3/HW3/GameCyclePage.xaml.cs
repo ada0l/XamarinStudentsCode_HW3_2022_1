@@ -80,16 +80,20 @@ namespace HW3
 
         private void DrawNPC()
         {
-            _viewDatas = new ObservableCollection<CharacterViewData>(_controller.GetNpcKeysForCurrentDialog().Select(x => _controller.GetNPC(x)).Where(x => x != null).Select(x => new CharacterViewData
-            {
-                npc = x,
-                image = x.image,
-                x = Constraint.Constant(x.transform.x),
-                y = Constraint.Constant(x.transform.y),
-                width = Constraint.Constant(x.transform.width),
-                height = Constraint.Constant(x.transform.height),
-                opacity = 0.6
-            }).ToList()); ;
+            _viewDatas = new ObservableCollection<CharacterViewData>(
+                _controller.GetNpcKeysForCurrentDialog().
+                Select(x => _controller.GetNPC(x)).
+                Where(x => x != null).
+                Select(x => new CharacterViewData {
+                    npc = x,
+                    image = x.image,
+                    x = Constraint.Constant(x.transform.x),
+                    y = Constraint.Constant(x.transform.y),
+                    width = Constraint.Constant(x.transform.width),
+                    height = Constraint.Constant(x.transform.height),
+                    opacity = 0.6
+                }
+            ).ToList()); ;
 
             // W/A
             BindableLayout.SetItemsSource(charactersHolder, _viewDatas);
