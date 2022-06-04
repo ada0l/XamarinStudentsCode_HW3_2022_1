@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -49,21 +47,27 @@ namespace VisualNowel
         public Options options;
     }
 
+    public struct GameData
+    {
+        public SortedDictionary<string, NPC> characters;
+        public SortedDictionary<string, Dialog> dialogs;
+    }
+
     public class DialogController
     {
 
-        private SortedDictionary<string, NPC> _characters = new SortedDictionary<string, NPC>();
-
-        private SortedDictionary<string, Dialog> _dialogs = new SortedDictionary<string, Dialog>();
+        private SortedDictionary<string, NPC> _characters;
+        private SortedDictionary<string, Dialog> _dialogs;
         private Dialog? _currentDialog = null;
         private int _currentStepIndex = 0;
 
         public SortedDictionary<string, Dialog> Dialogs => _dialogs;
 
-        public DialogController()
+        public DialogController(GameData gameData, string startDialog)
         {
-            LoadCharacters();
-            SetNextDialog("dialog1");
+            _characters = gameData.characters;
+            _dialogs = gameData.dialogs;
+            SetNextDialog(startDialog);
         }
 
         public void NextStep()
@@ -87,10 +91,6 @@ namespace VisualNowel
 
         public void SetNextDialog(string dialogName)
         {
-            if (!_dialogs.ContainsKey(dialogName))
-            {
-                _dialogs.Add(dialogName, LoadDialog(dialogName));
-            }
             if (_dialogs.TryGetValue(dialogName, out var nextDialog))
             {
                 _currentDialog = nextDialog;
@@ -116,26 +116,6 @@ namespace VisualNowel
         {
             return  new SortedSet<string>(_currentDialog?.steps.Select(x => x.npc).Concat(
                 new [] { _currentDialog?.options.npc } ));
-        }
-
-        private string LoadFile(string filename)
-        {
-            var stream = Application.Current.GetType().Assembly.GetManifestResourceStream(filename);
-            var reader = new StreamReader(stream);
-            var json = reader.ReadToEnd();
-            return json;
-        }
-
-        private void LoadCharacters()
-        {
-            _characters = JsonConvert.DeserializeObject<SortedDictionary<string, NPC>>(
-                LoadFile("HW3.Assets.npc.json"));
-        }
-
-        public Dialog LoadDialog(string dialog_name)
-        {
-            return JsonConvert.DeserializeObject<Dialog>(
-                LoadFile($"HW3.Assets.Dialogs.{dialog_name}.json"));
         }
     }
 }
