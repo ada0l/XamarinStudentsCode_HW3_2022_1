@@ -12,10 +12,18 @@
 
   <ItemGroup>
     <None Remove="Assets\Dialogs\dialog1.json" />
+    <None Remove="Assets\Dialogs\dialog2.json" />
+    <None Remove="Assets\Dialogs\dialog3.json" />
     <None Remove="Assets\npc.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Dialogs\dialog3.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Dialogs\dialog2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Assets\Dialogs\dialog1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
